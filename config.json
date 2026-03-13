@@ -131,6 +131,11 @@
 
   "bookmarks": [
     {
+      "name": "Modify Dashboard",
+      "icon": "🏠",
+      "url": "https://github.com/karan51290/dash.zoloinnovations.com/edit/main/config.json"
+    },
+    {
       "name": "Vibe Code link of Dashboard",
       "icon": "⌨️",
       "url": "https://aistudio.google.com/apps/83f7cc92-cb39-49ee-9dae-4d7a66cbe460?showAssistant=true&showPreview=true"
