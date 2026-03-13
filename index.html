@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Server Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-hover: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --border: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.5rem;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            background-color: var(--card-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .card-content {
+            flex: 1;
+            min-width: 0; /* Enables text truncation */
+        }
+
+        .card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--text-muted);
+            box-shadow: 0 0 0 2px var(--card-bg);
+            flex-shrink: 0;
+        }
+
+        .status-online {
+            background-color: var(--success);
+            box-shadow: 0 0 8px var(--success);
+        }
+
+        .status-offline {
+            background-color: var(--danger);
+            box-shadow: 0 0 8px var(--danger);
+        }
+
+        .status-checking {
+            background-color: var(--accent);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        /* Automation specific styles */
+        .automation-card {
+            justify-content: center;
+            text-align: center;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .automation-card .card-icon {
+            margin-bottom: 0.25rem;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 50;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        @media (max-width: 640px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            body {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Home Server Dashboard</h1>
+            <p class="subtitle">Central hub for your self-hosted services</p>
+        </header>
+
+        <div id="dashboard-content">
+            <!-- Content will be injected here by JS -->
+            <div style="text-align: center; color: var(--text-muted); padding: 3rem;">
+                Loading configuration...
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Configuration fallback in case config.json fails to load
+        const defaultConfig = {
+            servers: [
+                { name: "Remote Server", url: "https://home.miglanis.in" },
+                { name: "Local Server", url: "http://192.168.1.114" }
+            ],
+            shortcuts: [
+                { name: "Jellyfin", icon: "🎬", url: "http://192.168.1.114:8096" },
+                { name: "qBittorrent", icon: "⬇️", url: "http://192.168.1.114:8080" }
+            ],
+            automations: [
+                { name: "Wake on LAN", icon: "⚡", action: "/api/wol" }
+            ]
+        };
+
+        let config = null;
+
+        // Utility to show toast notifications
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Ping function using no-cors fetch
+        async function checkStatus(url) {
+            try {
+                // We use no-cors so we don't get blocked by CORS policies.
+                // If the fetch completes (even with an opaque response), the server is reachable.
+                // We append a cache-buster to avoid cached responses.
+                const cacheBuster = `?cb=${new Date().getTime()}`;
+                const pingUrl = url.endsWith('/') ? `${url}${cacheBuster}` : `${url}/${cacheBuster}`;
+                
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+                
+                await fetch(pingUrl, { 
+                    mode: 'no-cors', 
+                    cache: 'no-store',
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // Render the dashboard
+        function renderDashboard() {
+            const container = document.getElementById('dashboard-content');
+            container.innerHTML = '';
+
+            // 1. Server Status Section
+            if (config.servers && config.servers.length > 0) {
+                const section = document.createElement('div');
+                section.className = 'section';
+                section.innerHTML = `<h2 class="section-title">Server Status</h2><div class="grid" id="servers-grid"></div>`;
+                container.appendChild(section);
+
+                const grid = section.querySelector('#servers-grid');
+                config.servers.forEach((server, index) => {
+                    const id = `server-${index}`;
+                    const card = document.createElement('a');
+                    card.href = server.url;
+                    card.target = "_blank";
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <div class="card-icon">🖥️</div>
+                        <div class="card-content">
+                            <div class="card-title">${server.name}</div>
+                            <div class="card-subtitle">${server.url}</div>
+                        </div>
+                        <div id="${id}-status" class="status-indicator status-checking" title="Checking status..."></div>
+                    `;
+                    grid.appendChild(card);
+                    
+                    // Initial check
+                    updateStatus(server.url, `${id}-status`);
+                });
+            }
+
+            // 2. Shortcuts Section
+            if (config.shortcuts && config.shortcuts.length > 0) {
+                const section = document.createElement('div');
+                section.className = 'section';
+                section.innerHTML = `<h2 class="section-title">Shortcuts</h2><div class="grid" id="shortcuts-grid"></div>`;
+                container.appendChild(section);
+
+                const grid = section.querySelector('#shortcuts-grid');
+                config.shortcuts.forEach((shortcut, index) => {
+                    const id = `shortcut-${index}`;
+                    const card = document.createElement('a');
+                    card.href = shortcut.url;
+                    card.target = "_blank";
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <div class="card-icon">${shortcut.icon || '🔗'}</div>
+                        <div class="card-content">
+                            <div class="card-title">${shortcut.name}</div>
+                            <div class="card-subtitle">${shortcut.url}</div>
+                        </div>
+                        <div id="${id}-status" class="status-indicator status-checking" title="Checking status..."></div>
+                    `;
+                    grid.appendChild(card);
+
+                    // Initial check
+                    updateStatus(shortcut.url, `${id}-status`);
+                });
+            }
+
+            // 3. Automations Section
+            if (config.automations && config.automations.length > 0) {
+                const section = document.createElement('div');
+                section.className = 'section';
+                section.innerHTML = `<h2 class="section-title">Run Automations</h2><div class="grid" id="automations-grid"></div>`;
+                container.appendChild(section);
+
+                const grid = section.querySelector('#automations-grid');
+                config.automations.forEach((automation) => {
+                    const card = document.createElement('div');
+                    card.className = 'card automation-card';
+                    card.innerHTML = `
+                        <div class="card-icon">${automation.icon || '⚡'}</div>
+                        <div class="card-title">${automation.name}</div>
+                    `;
+                    card.onclick = async () => {
+                        showToast(`Triggering ${automation.name}...`);
+                        try {
+                            // Attempt to trigger the automation
+                            await fetch(automation.action, { mode: 'no-cors' });
+                            showToast(`Successfully triggered ${automation.name}`);
+                        } catch (e) {
+                            showToast(`Failed to trigger ${automation.name}`);
+                        }
+                    };
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        // Update status indicator for a specific element
+        async function updateStatus(url, elementId) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            
+            el.className = 'status-indicator status-checking';
+            el.title = 'Checking status...';
+            
+            const isOnline = await checkStatus(url);
+            
+            el.className = `status-indicator ${isOnline ? 'status-online' : 'status-offline'}`;
+            el.title = isOnline ? 'Online' : 'Offline';
+        }
+
+        // Periodically check all statuses
+        function startStatusChecks() {
+            // Check every 30 seconds
+            setInterval(() => {
+                if (config.servers) {
+                    config.servers.forEach((server, index) => {
+                        updateStatus(server.url, `server-${index}-status`);
+                    });
+                }
+                if (config.shortcuts) {
+                    config.shortcuts.forEach((shortcut, index) => {
+                        updateStatus(shortcut.url, `shortcut-${index}-status`);
+                    });
+                }
+            }, 30000);
+        }
+
+        // Initialize the dashboard
+        async function init() {
+            try {
+                // Try to load config.json
+                // Added cache-busting to ensure we get the latest config
+                const response = await fetch('config.json?cb=' + new Date().getTime());
+                if (response.ok) {
+                    config = await response.json();
+                } else {
+                    throw new Error('Failed to load config.json');
+                }
+            } catch (error) {
+                console.warn('Using default configuration:', error);
+                config = defaultConfig;
+                showToast('Loaded default configuration. Create config.json to customize.');
+            }
+
+            renderDashboard();
+            startStatusChecks();
+        }
+
+        // Start the app
+        init();
+    </script>
+</body>
+</html>
