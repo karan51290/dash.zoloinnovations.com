@@ -292,7 +292,7 @@
             }
         }
 
-        // Ping function using multiple fallback methods
+        // Ping function using fetch with no-cors
         async function checkStatus(url) {
             try {
                 const urlObj = new URL(url);
@@ -317,54 +317,21 @@
                 }
 
                 // Method 2: Try fetching the root URL
-                try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 3000);
-                    
-                    await fetch(`${url}${url.includes('?') ? '&' : '?'}${cacheBuster.substring(1)}`, { 
-                        mode: 'no-cors', 
-                        cache: 'no-store',
-                        signal: controller.signal
-                    });
-                    
-                    clearTimeout(timeoutId);
-                    return true;
-                } catch (e) {
-                    // Method 2 failed, continue to Method 3
-                }
-
-                // Method 3: The Image Hack (Bypasses strict CORS/Fetch blocking)
-                // Some servers completely reject fetch() but will serve an image tag.
-                return new Promise((resolve) => {
-                    const img = new Image();
-                    const timeoutId = setTimeout(() => {
-                        img.src = ''; // Cancel loading
-                        console.warn(`All ping methods failed for ${url}`);
-                        resolve(false);
-                    }, 4000);
-
-                    // If the image loads (even if it's a 404 image or a broken image icon), 
-                    // it means the server responded!
-                    img.onload = () => {
-                        clearTimeout(timeoutId);
-                        resolve(true);
-                    };
-                    
-                    // If it errors, it might still mean the server is up but returned a 401/403/404.
-                    // However, if the server is completely down, it will timeout.
-                    img.onerror = () => {
-                        clearTimeout(timeoutId);
-                        // We assume true here because a connection refused/timeout won't trigger onerror immediately,
-                        // but a 404/401/403 from the server WILL trigger onerror immediately.
-                        resolve(true); 
-                    };
-
-                    // Try to load the favicon as an image
-                    img.src = `${origin}/favicon.ico${cacheBuster}`;
+                // This will succeed (opaque response) if the server is up, even if it returns 404/500
+                // It will throw an error ONLY if the network is unreachable, connection refused, or Mixed Content blocked
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3000);
+                
+                await fetch(`${url}${url.includes('?') ? '&' : '?'}${cacheBuster.substring(1)}`, { 
+                    mode: 'no-cors', 
+                    cache: 'no-store',
+                    signal: controller.signal
                 });
-
+                
+                clearTimeout(timeoutId);
+                return true;
             } catch (error) {
-                console.warn(`Invalid URL or critical failure for ${url}:`, error);
+                // If fetch throws, the server is genuinely unreachable (or blocked by browser Mixed Content rules)
                 return false;
             }
         }
