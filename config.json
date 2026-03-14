@@ -187,10 +187,11 @@
           "name": "Mktg Keywords Watchlist",
           "icon": "🔎",
           "url": "https://airtable.com/appoSLyUiYVoDBkSM/tblqQD51FGGzhJotL/viwCeTSJKtWxURiqS?blocks=hide"
-        }
-      },
-        {
-      "title": "Data Tables",
+       }
+      ]
+    },
+    {
+        "title": "Data Tables",
       "layout": "small",
       "items": [
         {
