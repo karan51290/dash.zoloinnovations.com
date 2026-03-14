@@ -165,14 +165,34 @@
       ]
     },
     {
-      "title": "Data Tables",
+      "title": "Airtable Databases",
       "layout": "small",
       "items": [
         {
-          "name": "Mktg Leads (from WA Groups",
-          "icon": "⚙️",
-          "url": "https://n8n.zoloinnovations.com/projects/2Fl1CZqNzLYgg3QS/datatables/Fi6WU5Yteo0ClW5O"
+          "name": "Message Templates",
+          "icon": "💬",
+          "url": "https://airtable.com/appyZzwWoaxooRRW8/tblXXNOsL5SHsDdmY/viwWnkVPxd1XSRRnK?blocks=hide"
         },
+      {
+          "name": "PZ Products",
+          "icon": "🛒",
+          "url": "https://airtable.com/appp0xmgyp0T3XUmL/tblq76wlbD6GOS7Si/viwgrbc2I5KURueYN?blocks=hide"
+        },
+      {
+          "name": "Pending Payments",
+          "icon": "💵",
+          "url": "https://airtable.com/app5TumigL9F617Ww/tblSpO9DWhcgJ567q/viweqUMBf9EwbWlDk?blocks=hide"
+        },
+      {
+          "name": "Mktg Keywords Watchlist",
+          "icon": "🔎",
+          "url": "https://airtable.com/appoSLyUiYVoDBkSM/tblqQD51FGGzhJotL/viwCeTSJKtWxURiqS?blocks=hide"
+        }
+      },
+        {
+      "title": "Data Tables",
+      "layout": "small",
+      "items": [
         {
           "name": "PZ Leads & Enquiries",
           "icon": "📃",
