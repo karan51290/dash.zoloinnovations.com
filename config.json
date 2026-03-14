@@ -1,144 +1,215 @@
-{ 
-  "servers": [
+{
+  "sections": [
     {
-      "name": "Vaio - Remote Access",
-      "url": "https://home.miglanis.in"
-    },
-    {
-      "name": "Vaio - Local Access",
-      "url": "http://192.168.1.114"
-    },
-    {
-      "name": "N8N",
-      "url": "https://n8n.zoloinnovations.com"
-    },
-    {
-      "name": "Evolution API",
-      "url": "https://wa.zoloinnovations.com/manager"
-    }
-  ],
- 
-  "tools": [
-    {
-      "name": "Group Marketing Form",
-      "icon": "👥",
-      "url": "https://n8n.zoloinnovations.com/form/grpMktgForm"
-    },
-    {
-      "name": "Leads Outreach Form",
-      "icon": "📣",
-      "url": "https://n8n.zoloinnovations.com/form/leadSender"
-    }
-  ],
- 
-  "automations": [
-    {
-      "name": "Send Products in Community",
-      "icon": "🏷",
-      "action": "https://n8n.zoloinnovations.com/webhook/sendCommunityMsgs"
-    },
-    {
-      "name": "Send Payment Reminders",
-      "icon": "💸",
-      "action": "https://n8n.zoloinnovations.com/webhook/sendReminders"
-    },
-    {
-      "name": "Send Follow-Up Offer",
-      "icon": "👋",
-      "action": "https://n8n.zoloinnovations.com/webhook/sendFollowUps"
-    },
-    {
-      "name": "Start Group Marketing",
-      "icon": "👥",
-      "action": "https://n8n.zoloinnovations.com/webhook/grpMktg"
-    },
-    {
-      "name": "Restart Evolution Instances",
-      "icon": "🔃",
-      "action": "https://n8n.zoloinnovations.com/webhook/restartInstances"
-    },
-    {
-      "name": "Sync Data Tables",
-      "icon": "🔄",
-      "action": "https://n8n.zoloinnovations.com/webhook/syncTables"
-    }
-  ],
-
-  "scripts": [
-    {
-      "name": "Jellyfin Reorganize (to be added)",
-      "icon": "📜",
-      "url": "https://github.com"
-    }
-  ],
-  
-  "shortcuts": [
-    {
-      "name": "Jellyfin",
-      "icon": "🎬",
-      "url": "https://media.miglanis.in"
-    },
-    {
-      "name": "qBittorrent",
-      "icon": "📤",
-      "url": "https://qbittorrent.miglanis.in"
-    },
-    {
-      "name": "Prowlarr",
-      "icon": "🔍",
-      "url": "https://add.miglanis.in"
-    },
-    {
-      "name": "Aria2",
-      "icon": "⬇️",
-      "url": "https://dl.miglanis.in"
-    },    
-    {
-      "name": "Resilio Sync",
-      "icon": "🔄",
-      "url": "https://sync.miglanis.in"
-    },
+      "title": "Server Status",
+      "layout": "large",
+      "showUrl": true,
+      "showStatus": true,
+      "items": [
         {
-      "name": "Restic Backups",
-      "icon": "💾",
-      "url": "https://backup.miglanis.in"
-    },
+          "name": "Vaio - Remote Access",
+          "icon": "🖥️",
+          "url": "https://home.miglanis.in"
+        },
         {
-      "name": "CopyParty (File Access)",
-      "icon": "📂",
-      "url": "https://files.miglanis.in"
-    }
-
-  ],
-
-  "workflows": [
-    {
-      "name": "PZ Chatbot Workflow",
-      "icon": "⚙️",
-      "url": "https://n8n.zoloinnovations.com/workflow/T9LLoLRUS27Oh31z"
+          "name": "Vaio - Local Access",
+          "icon": "💻",
+          "url": "http://192.168.1.114"
+        },
+        {
+          "name": "N8N",
+          "icon": "⚙️",
+          "url": "https://n8n.zoloinnovations.com"
+        },
+        {
+          "name": "Evolution API",
+          "icon": "📱",
+          "url": "https://wa.zoloinnovations.com/manager"
+        }
+      ]
     },
     {
-      "name": "Group Marketing 128 Workflow",
-      "icon": "⚙️",
-      "url": "https://n8n.zoloinnovations.com/workflow/3FTT9dVz0Q9UCqDP"
+      "title": "Tools",
+      "layout": "large",
+      "showUrl": false,
+      "showStatus": false,
+      "items": [
+        {
+          "name": "Group Marketing Form",
+          "icon": "👥",
+          "url": "https://n8n.zoloinnovations.com/form/grpMktgForm"
+        },
+        {
+          "name": "Leads Outreach Form",
+          "icon": "📣",
+          "url": "https://n8n.zoloinnovations.com/form/leadSender"
+        }
+      ]
     },
     {
-      "name": "Lead Outreach Form Workflow",
-      "icon": "⚙️",
-      "url": "https://n8n.zoloinnovations.com/workflow/hEAKjvLyoPkA3XK7"
-    }
-  ],
-
-  "bookmarks": [
-    {
-      "name": "Modify Dashboard",
-      "icon": "🏠",
-      "url": "https://github.com/karan51290/dash.zoloinnovations.com/edit/main/config.json"
+      "title": "Run Automations",
+      "layout": "small",
+      "items": [
+        {
+          "name": "Send Products in Community",
+          "icon": "🏷",
+          "action": "https://n8n.zoloinnovations.com/webhook/sendCommunityMsgs"
+        },
+        {
+          "name": "Send Payment Reminders",
+          "icon": "💸",
+          "action": "https://n8n.zoloinnovations.com/webhook/sendReminders"
+        },
+        {
+          "name": "Send Follow-Up Offer",
+          "icon": "👋",
+          "action": "https://n8n.zoloinnovations.com/webhook/sendFollowUps"
+        },
+        {
+          "name": "Start Group Marketing",
+          "icon": "👥",
+          "action": "https://n8n.zoloinnovations.com/webhook/grpMktg"
+        },
+        {
+          "name": "Restart Evolution Instances",
+          "icon": "🔃",
+          "action": "https://n8n.zoloinnovations.com/webhook/restartInstances"
+        },
+        {
+          "name": "Sync Data Tables",
+          "icon": "🔄",
+          "action": "https://n8n.zoloinnovations.com/webhook/syncTables"
+        }
+      ]
     },
     {
-      "name": "Vibe Code link of Dashboard",
-      "icon": "⌨️",
-      "url": "https://aistudio.google.com/apps/83f7cc92-cb39-49ee-9dae-4d7a66cbe460?showAssistant=true&showPreview=true"
+      "title": "Applications",
+      "layout": "large",
+      "showUrl": true,
+      "showStatus": true,
+      "items": [
+        {
+          "name": "Jellyfin",
+          "icon": "🎬",
+          "url": "https://media.miglanis.in"
+        },
+        {
+          "name": "Stremio",
+          "icon": "▶️",
+          "url": "https://web.stremio.com"
+        },
+        {
+          "name": "qBittorrent",
+          "icon": "📤",
+          "url": "https://torrent.miglanis.in"
+        },
+        {
+          "name": "Prowlarr",
+          "icon": "🔍",
+          "url": "https://add.miglanis.in"
+        },
+        {
+          "name": "Aria2",
+          "icon": "⬇️",
+          "url": "https://dl.miglanis.in"
+        },
+        {
+          "name": "Resilio Sync",
+          "icon": "🔄",
+          "url": "https://sync.miglanis.in"
+        },
+        {
+          "name": "Restic Backups",
+          "icon": "💾",
+          "url": "https://backup.miglanis.in"
+        },
+        {
+          "name": "CopyParty (File Access)",
+          "icon": "📂",
+          "url": "https://files.miglanis.in"
+        }
+      ]
+    },
+    {
+      "title": "Scripts",
+      "layout": "small",
+      "items": [
+        {
+          "name": "Jellyfin Reorganize (to be added)",
+          "icon": "📜",
+          "url": "https://github.com"
+        }
+      ]
+    },
+    {
+      "title": "Workflows",
+      "layout": "large",
+      "showUrl": false,
+      "showStatus": false,
+      "items": [
+        {
+          "name": "PZ Chatbot Workflow",
+          "icon": "⚙️",
+          "url": "https://n8n.zoloinnovations.com/workflow/T9LLoLRUS27Oh31z"
+        },
+        {
+          "name": "Group Marketing 128 Workflow",
+          "icon": "⚙️",
+          "url": "https://n8n.zoloinnovations.com/workflow/3FTT9dVz0Q9UCqDP"
+        },
+        {
+          "name": "Lead Outreach Form Workflow",
+          "icon": "⚙️",
+          "url": "https://n8n.zoloinnovations.com/workflow/hEAKjvLyoPkA3XK7"
+        }
+      ]
+    },
+    {
+      "title": "Data Tables",
+      "layout": "small",
+      "items": [
+        {
+          "name": "Mktg Leads (from WA Groups",
+          "icon": "⚙️",
+          "url": "https://n8n.zoloinnovations.com/projects/2Fl1CZqNzLYgg3QS/datatables/Fi6WU5Yteo0ClW5O"
+        },
+        {
+          "name": "PZ Leads & Enquiries",
+          "icon": "📃",
+          "url": "https://n8n.zoloinnovations.com/projects/2Fl1CZqNzLYgg3QS/datatables/YflFP9hJec2pOOnV"
+        },
+        {
+          "name": "Subscriptions & Orders",
+          "icon": "📃",
+          "url": "https://n8n.zoloinnovations.com/projects/2Fl1CZqNzLYgg3QS/datatables/KZInFzVXN6UbVCnB"
+        },
+        {
+          "name": "Mktg Leads (from WA Groups",
+          "icon": "📃",
+          "url": "https://n8n.zoloinnovations.com/projects/2Fl1CZqNzLYgg3QS/datatables/Fi6WU5Yteo0ClW5O"
+        },
+        {
+          "name": "Whatsapp Groups Jio128",
+          "icon": "📃",
+          "url": "https://n8n.zoloinnovations.com/projects/2Fl1CZqNzLYgg3QS/datatables/lx1wHIu919mdVeZY"
+        }
+      ]
+    },
+    {
+      "title": "Bookmarks",
+      "layout": "small",
+      "items": [
+        {
+          "name": "Modify Dashboard",
+          "icon": "🏠",
+          "url": "https://github.com/karan51290/dash.zoloinnovations.com/edit/main/config.json"
+        },
+        {
+          "name": "Vibe Code link of Dashboard",
+          "icon": "⌨️",
+          "url": "https://aistudio.google.com/apps/83f7cc92-cb39-49ee-9dae-4d7a66cbe460?showAssistant=true&showPreview=true"
+        }
+      ]
     }
   ]
 }
