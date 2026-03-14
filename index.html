@@ -253,16 +253,34 @@
 
         // Configuration fallback in case config.json fails to load
         const defaultConfig = {
-            servers: [
-                { name: "Remote Server", url: "https://home.miglanis.in" },
-                { name: "Local Server", url: "http://192.168.1.114" }
-            ],
-            shortcuts: [
-                { name: "Jellyfin", icon: "🎬", url: "http://192.168.1.114:8096" },
-                { name: "qBittorrent", icon: "⬇️", url: "http://192.168.1.114:8080" }
-            ],
-            automations: [
-                { name: "Wake on LAN", icon: "⚡", action: "/api/wol" }
+            sections: [
+                {
+                    title: "Server Status",
+                    layout: "large",
+                    showUrl: true,
+                    showStatus: true,
+                    items: [
+                        { name: "Remote Server", icon: "🖥️", url: "https://home.miglanis.in" },
+                        { name: "Local Server", icon: "💻", url: "http://192.168.1.114" }
+                    ]
+                },
+                {
+                    title: "Applications",
+                    layout: "large",
+                    showUrl: true,
+                    showStatus: true,
+                    items: [
+                        { name: "Jellyfin", icon: "🎬", url: "http://192.168.1.114:8096" },
+                        { name: "qBittorrent", icon: "⬇️", url: "http://192.168.1.114:8080" }
+                    ]
+                },
+                {
+                    title: "Automations",
+                    layout: "small",
+                    items: [
+                        { name: "Wake on LAN", icon: "⚡", action: "/api/wol" }
+                    ]
+                }
             ]
         };
 
@@ -341,196 +359,89 @@
             const container = document.getElementById('dashboard-content');
             container.innerHTML = '';
 
-            // 1. Server Status Section
-            if (config.servers && config.servers.length > 0) {
-                const section = document.createElement('div');
-                section.className = 'section';
-                section.innerHTML = `<h2 class="section-title">Server Status</h2><div class="grid" id="servers-grid"></div>`;
-                container.appendChild(section);
+            // Backward compatibility: If config has old keys, convert them to sections format
+            if (!config.sections) {
+                config.sections = [];
+                if (config.servers && config.servers.length > 0) config.sections.push({ title: "Server Status", layout: "large", showUrl: true, showStatus: true, items: config.servers.map(s => ({...s, icon: s.icon || '🖥️'})) });
+                if (config.tools && config.tools.length > 0) config.sections.push({ title: "Tools", layout: "large", showUrl: false, showStatus: false, items: config.tools });
+                if (config.automations && config.automations.length > 0) config.sections.push({ title: "Run Automations", layout: "small", items: config.automations });
+                if (config.shortcuts && config.shortcuts.length > 0) config.sections.push({ title: "Applications", layout: "large", showUrl: true, showStatus: true, items: config.shortcuts });
+                if (config.scripts && config.scripts.length > 0) config.sections.push({ title: "Scripts", layout: "small", items: config.scripts });
+                if (config.workflows && config.workflows.length > 0) config.sections.push({ title: "Workflows", layout: "large", showUrl: false, showStatus: false, items: config.workflows });
+                if (config.bookmarks && config.bookmarks.length > 0) config.sections.push({ title: "Bookmarks", layout: "small", items: config.bookmarks });
+            }
 
-                const grid = section.querySelector('#servers-grid');
-                config.servers.forEach((server, index) => {
-                    const id = `server-${index}`;
-                    const card = document.createElement('a');
-                    card.href = server.url;
-                    card.target = "_blank";
-                    card.className = 'card';
-                    card.innerHTML = `
-                        <div class="card-icon">🖥️</div>
-                        <div class="card-content">
-                            <div class="card-title">${server.name}</div>
-                            <div class="card-subtitle">${server.url}</div>
-                        </div>
-                        <div id="${id}-status" class="status-indicator status-checking" title="Checking status..."></div>
-                    `;
-                    grid.appendChild(card);
+            config.sections.forEach((section, sIndex) => {
+                if (!section.items || section.items.length === 0) return;
+
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'section';
+                
+                const gridClass = section.layout === 'small' ? 'automations-grid' : 'grid';
+                const gridId = `section-grid-${sIndex}`;
+                
+                sectionEl.innerHTML = `<h2 class="section-title">${section.title}</h2><div class="${gridClass}" id="${gridId}"></div>`;
+                container.appendChild(sectionEl);
+
+                const grid = sectionEl.querySelector(`#${gridId}`);
+
+                section.items.forEach((item, iIndex) => {
+                    const id = `item-${sIndex}-${iIndex}`;
                     
-                    updateStatus(server.url, `${id}-status`);
-                });
-            }
-
-            // 2. Tools Section
-            if (config.tools && config.tools.length > 0) {
-                const section = document.createElement('div');
-                section.className = 'section';
-                section.innerHTML = `<h2 class="section-title">Tools</h2><div class="grid" id="tools-grid"></div>`;
-                container.appendChild(section);
-
-                const grid = section.querySelector('#tools-grid');
-                config.tools.forEach((tool) => {
-                    const card = document.createElement('a');
-                    card.href = tool.url;
-                    card.target = "_blank";
-                    card.className = 'card';
-                    card.innerHTML = `
-                        <div class="card-icon">${tool.icon || '🧰'}</div>
-                        <div class="card-content">
-                            <div class="card-title wrap-text">${tool.name}</div>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
-            }
-
-            // 3. Automations Section
-            if (config.automations && config.automations.length > 0) {
-                const section = document.createElement('div');
-                section.className = 'section';
-                section.innerHTML = `<h2 class="section-title">Run Automations</h2><div class="automations-grid" id="automations-grid"></div>`;
-                container.appendChild(section);
-
-                const grid = section.querySelector('#automations-grid');
-                config.automations.forEach((automation) => {
-                    const card = document.createElement('div');
-                    card.className = 'card automation-card';
-                    card.innerHTML = `
-                        <div class="card-icon">${automation.icon || '⚡'}</div>
-                        <div class="card-title">${automation.name}</div>
-                    `;
-                    card.onclick = async () => {
-                        showToast(`Triggering ${automation.name}...`);
-                        try {
-                            await fetch(automation.action, { mode: 'no-cors' });
-                            showToast(`Successfully triggered ${automation.name}`);
-                        } catch (e) {
-                            showToast(`Failed to trigger ${automation.name}`);
-                        }
-                    };
-                    grid.appendChild(card);
-                });
-            }
-
-            // 4. Applications Section
-            if (config.shortcuts && config.shortcuts.length > 0) {
-                const section = document.createElement('div');
-                section.className = 'section';
-                section.innerHTML = `<h2 class="section-title">Applications</h2><div class="grid" id="shortcuts-grid"></div>`;
-                container.appendChild(section);
-
-                const grid = section.querySelector('#shortcuts-grid');
-                config.shortcuts.forEach((shortcut, index) => {
-                    const id = `shortcut-${index}`;
-                    const card = document.createElement('a');
-                    card.href = shortcut.url;
-                    card.target = "_blank";
-                    card.className = 'card';
-                    card.innerHTML = `
-                        <div class="card-icon">${shortcut.icon || '🔗'}</div>
-                        <div class="card-content">
-                            <div class="card-title">${shortcut.name}</div>
-                            <div class="card-subtitle">${shortcut.url}</div>
-                        </div>
-                        <div id="${id}-status" class="status-indicator status-checking" title="Checking status..."></div>
-                    `;
-                    grid.appendChild(card);
-
-                    updateStatus(shortcut.url, `${id}-status`);
-                });
-            }
-
-            // 5. Scripts Section
-            if (config.scripts && config.scripts.length > 0) {
-                const section = document.createElement('div');
-                section.className = 'section';
-                section.innerHTML = `<h2 class="section-title">Scripts</h2><div class="automations-grid" id="scripts-grid"></div>`;
-                container.appendChild(section);
-
-                const grid = section.querySelector('#scripts-grid');
-                config.scripts.forEach((script) => {
-                    if (script.action) {
-                        const card = document.createElement('div');
-                        card.className = 'card automation-card';
-                        card.innerHTML = `
-                            <div class="card-icon">${script.icon || '📜'}</div>
-                            <div class="card-title">${script.name}</div>
-                        `;
+                    let card;
+                    if (item.action) {
+                        card = document.createElement('div');
+                        card.className = section.layout === 'small' ? 'card automation-card' : 'card';
                         card.onclick = async () => {
-                            showToast(`Triggering ${script.name}...`);
+                            showToast(`Triggering ${item.name}...`);
                             try {
-                                await fetch(script.action, { mode: 'no-cors' });
-                                showToast(`Successfully triggered ${script.name}`);
+                                await fetch(item.action, { mode: 'no-cors' });
+                                showToast(`Successfully triggered ${item.name}`);
                             } catch (e) {
-                                showToast(`Failed to trigger ${script.name}`);
+                                showToast(`Failed to trigger ${item.name}`);
                             }
                         };
-                        grid.appendChild(card);
                     } else {
-                        const card = document.createElement('a');
-                        card.href = script.url || '#';
+                        card = document.createElement('a');
+                        card.href = item.url || '#';
                         card.target = "_blank";
-                        card.className = 'card automation-card';
+                        card.className = section.layout === 'small' ? 'card automation-card' : 'card';
+                    }
+
+                    if (section.layout === 'small') {
                         card.innerHTML = `
-                            <div class="card-icon">${script.icon || '📜'}</div>
-                            <div class="card-title">${script.name}</div>
+                            <div class="card-icon">${item.icon || '⚡'}</div>
+                            <div class="card-title">${item.name}</div>
                         `;
-                        grid.appendChild(card);
+                    } else {
+                        // Large layout
+                        let contentHtml = `<div class="card-title ${!section.showUrl ? 'wrap-text' : ''}">${item.name}</div>`;
+                        if (section.showUrl && item.url) {
+                            contentHtml += `<div class="card-subtitle">${item.url}</div>`;
+                        }
+                        
+                        let statusHtml = '';
+                        if (section.showStatus && item.url) {
+                            statusHtml = `<div id="${id}-status" class="status-indicator status-checking" title="Checking status..."></div>`;
+                        }
+
+                        card.innerHTML = `
+                            <div class="card-icon">${item.icon || '🔗'}</div>
+                            <div class="card-content">
+                                ${contentHtml}
+                            </div>
+                            ${statusHtml}
+                        `;
+                    }
+
+                    grid.appendChild(card);
+
+                    // Trigger status check if needed
+                    if (section.layout === 'large' && section.showStatus && item.url) {
+                        updateStatus(item.url, `${id}-status`);
                     }
                 });
-            }
-
-            // 6. Workflows Section
-            if (config.workflows && config.workflows.length > 0) {
-                const section = document.createElement('div');
-                section.className = 'section';
-                section.innerHTML = `<h2 class="section-title">Workflows</h2><div class="grid" id="workflows-grid"></div>`;
-                container.appendChild(section);
-
-                const grid = section.querySelector('#workflows-grid');
-                config.workflows.forEach((workflow) => {
-                    const card = document.createElement('a');
-                    card.href = workflow.url || '#';
-                    card.target = "_blank";
-                    card.className = 'card';
-                    card.innerHTML = `
-                        <div class="card-icon">${workflow.icon || '⚙️'}</div>
-                        <div class="card-content">
-                            <div class="card-title wrap-text">${workflow.name}</div>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
-            }
-
-            // 7. Bookmarks Section
-            if (config.bookmarks && config.bookmarks.length > 0) {
-                const section = document.createElement('div');
-                section.className = 'section';
-                section.innerHTML = `<h2 class="section-title">Bookmarks</h2><div class="automations-grid" id="bookmarks-grid"></div>`;
-                container.appendChild(section);
-
-                const grid = section.querySelector('#bookmarks-grid');
-                config.bookmarks.forEach((bookmark) => {
-                    const card = document.createElement('a');
-                    card.href = bookmark.url || '#';
-                    card.target = "_blank";
-                    card.className = 'card automation-card';
-                    card.innerHTML = `
-                        <div class="card-icon">${bookmark.icon || '🔖'}</div>
-                        <div class="card-title">${bookmark.name}</div>
-                    `;
-                    grid.appendChild(card);
-                });
-            }
+            });
         }
 
         // Update status indicator for a specific element
@@ -550,16 +461,17 @@
         // Periodically check all statuses
         function startStatusChecks() {
             setInterval(() => {
-                if (config.servers) {
-                    config.servers.forEach((server, index) => {
-                        updateStatus(server.url, `server-${index}-status`);
-                    });
-                }
-                if (config.shortcuts) {
-                    config.shortcuts.forEach((shortcut, index) => {
-                        updateStatus(shortcut.url, `shortcut-${index}-status`);
-                    });
-                }
+                if (!config.sections) return;
+                
+                config.sections.forEach((section, sIndex) => {
+                    if (section.layout === 'large' && section.showStatus && section.items) {
+                        section.items.forEach((item, iIndex) => {
+                            if (item.url) {
+                                updateStatus(item.url, `item-${sIndex}-${iIndex}-status`);
+                            }
+                        });
+                    }
+                });
             }, 30000);
         }
 
