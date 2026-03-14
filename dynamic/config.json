@@ -51,34 +51,34 @@
       "layout": "small",
       "items": [
         {
-          "name": "Send Products in Community (to be Updated)",
+          "name": "Send Products in Community",
           "icon": "🏷",
-          "action": "https://n8n.zoloinnovations.com/webhook-test/sendCommunityMsgs"
+          "action": "https://n8n.zoloinnovations.com/webhook/sendCommunityMsgs"
         },
         {
-          "name": "Send Payment Reminders (to be Updated)",
+          "name": "Send Payment Reminders",
           "icon": "💸",
-          "action": "https://n8n.zoloinnovations.com/webhook-test/sendReminders"
+          "action": "https://n8n.zoloinnovations.com/webhook/sendReminders"
         },
         {
-          "name": "Send Follow-Up Offer (to be Updated)",
+          "name": "Send Follow-Up Offer",
           "icon": "👋",
-          "action": "https://n8n.zoloinnovations.com/webhook-test/sendFollowUps"
+          "action": "https://n8n.zoloinnovations.com/webhook/sendFollowUps"
         },
         {
-          "name": "Start Group Marketing (to be Updated)",
+          "name": "Start Group Marketing",
           "icon": "👥",
-          "action": "https://n8n.zoloinnovations.com/webhook-test/grpMktg"
+          "action": "https://n8n.zoloinnovations.com/webhook/grpMktg"
         },
         {
-          "name": "Restart Evolution Instances (to be Updated)",
+          "name": "Restart Evolution Instances",
           "icon": "🔃",
-          "action": "https://n8n.zoloinnovations.com/webhook-test/restartInstances"
+          "action": "https://n8n.zoloinnovations.com/webhook/restartInstances"
         },
         {
           "name": "Sync Data Tables",
           "icon": "🔄",
-          "action": "http://192.168.1.114:1880/endpoint/reboot"
+          "action": "https://n8n.zoloinnovations.com/webhook/syncTables"
         }
       ]
     },
@@ -92,6 +92,11 @@
           "name": "Jellyfin",
           "icon": "🎬",
           "url": "https://media.miglanis.in"
+        },
+        {
+          "name": "Stremio",
+          "icon": "▶️",
+          "url": "https://web.stremio.com"
         },
         {
           "name": "qBittorrent",
@@ -160,9 +165,45 @@
       ]
     },
     {
+      "title": "Data Tables",
+      "layout": "small",
+      "items": [
+        {
+          "name": "Mktg Leads (from WA Groups",
+          "icon": "⚙️",
+          "url": "https://n8n.zoloinnovations.com/projects/2Fl1CZqNzLYgg3QS/datatables/Fi6WU5Yteo0ClW5O"
+        },
+        {
+          "name": "PZ Leads & Enquiries",
+          "icon": "📃",
+          "url": "https://n8n.zoloinnovations.com/projects/2Fl1CZqNzLYgg3QS/datatables/YflFP9hJec2pOOnV"
+        },
+        {
+          "name": "Subscriptions & Orders",
+          "icon": "📃",
+          "url": "https://n8n.zoloinnovations.com/projects/2Fl1CZqNzLYgg3QS/datatables/KZInFzVXN6UbVCnB"
+        },
+        {
+          "name": "Mktg Leads (from WA Groups",
+          "icon": "📃",
+          "url": "https://n8n.zoloinnovations.com/projects/2Fl1CZqNzLYgg3QS/datatables/Fi6WU5Yteo0ClW5O"
+        },
+        {
+          "name": "Whatsapp Groups Jio128",
+          "icon": "📃",
+          "url": "https://n8n.zoloinnovations.com/projects/2Fl1CZqNzLYgg3QS/datatables/lx1wHIu919mdVeZY"
+        }
+      ]
+    },
+    {
       "title": "Bookmarks",
       "layout": "small",
       "items": [
+        {
+          "name": "Modify Dashboard",
+          "icon": "🏠",
+          "url": "https://github.com/karan51290/dash.zoloinnovations.com/edit/main/config.json"
+        },
         {
           "name": "Vibe Code link of Dashboard",
           "icon": "⌨️",
